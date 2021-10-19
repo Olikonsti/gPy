@@ -21,4 +21,4 @@ if len(sys.argv) > 1:
 
         Interpreter(c, compile, load_mode, debug)
 else:
-    print("file as arg")
+    print("Expected file as argument")

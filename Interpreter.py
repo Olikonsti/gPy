@@ -60,7 +60,7 @@ class Interpreter():
                 print(f"{self.inspected_actions = }")
 
     def save(self, filename):
-        save = {"sp_code": self.split_code, "actions": self.actions, "stack": self.stack}
+        save = {"version": self.version, "sp_code": self.split_code, "actions": self.actions, "stack": self.stack}
         f = open(filename, "w")
         f.write(str(save))
         f.close()
@@ -70,6 +70,11 @@ class Interpreter():
         d = f.read()
         exec(f"global save_; save_ = {d}")
         f.close()
+        if save_["version"] != self.version:
+            print("INTERPRETER ERROR: VERSION WRONG")
+            print(f"SCRIPT_VERSION: {save_['version']}")
+            print(f"INTERPRETER_VERSION: {self.version}\n")
+            input(">PRESS RETURN TO TRY EXECUTING THE CODE")
         self.split_code = save_["sp_code"]
         self.actions = save_["actions"]
         self.stack = save_["stack"]
