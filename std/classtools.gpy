@@ -1,0 +1,60 @@
+"tools for creating classes with gpy"
+
+@action obj {
+    "takes a classname as an argument and returns an uuid adress pointing to a dict"
+
+    classname = arg[0]
+    uuid = genuuid
+
+    py 2 {
+        var = stack["classname"][1:]
+        stack["var_"] = var
+        uuid = stack["uuid"]
+        stack[str(var) + str(uuid)] = {}
+    }
+    obj_address = stradd var_ uuid
+    return obj_address
+}
+
+@action setattr {
+    "creates a class attribute in [obj_address] with name [variable_name] and the content [variable_content]"
+
+    obj_address = arg[0]
+    variable_name = arg[1]
+    variable_content = arg[2]
+
+    py 2 {
+        variable_name = stack["variable_name"]
+        variable_content = stack["variable_content"]
+        obj_address = stack["obj_address"]
+        stack[obj_address][variable_pointer] = variable_content
+    }
+}
+
+@action attr {
+    "creates a class attribute in [obj_address] of a pointer to a variable"
+
+    obj_address = arg[0]
+    variable_pointer = arg[1]
+    variable_content = value arg[1]
+
+    py 2 {
+        variable_pointer = stack["variable_pointer"][1:]
+        variable_content = stack["variable_content"]
+        obj_address = stack["obj_address"]
+        stack[obj_address][variable_pointer] = variable_content
+    }
+}
+
+@action getattr {
+    "returns the content of a class attribute from a pointer"
+
+    obj_address = arg[0]
+    variable_pointer = arg[1]
+
+    py 2 {
+        variable_pointer = stack["variable_pointer"][1:]
+        obj_address = stack["obj_address"]
+        stack["return"] = stack[obj_address][variable_pointer]
+    }
+}

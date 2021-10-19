@@ -1,0 +1,39 @@
+@import std/stdlib.gpy
+@import testlib
+
+@action main {
+    var2 = 6
+    test var2
+    soos
+}
+
+@action test {
+    count = 0
+    count = count + 1
+    print count
+    f = input ">"
+    get_type *f
+    get_type *count
+    print f
+    d = window
+    loop d
+    #soos
+}
+
+@action soos {
+    print "before_if"s
+    if var2 == 12 {
+        print "ye"
+        print var2
+    }
+    print logs
+    ses
+}
+
+@action ses {
+    while 1 == 1 {
+        var2 = var2 + 10
+        print var2
+        #delay 0.1
+    }
+}

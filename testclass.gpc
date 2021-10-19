@@ -1,0 +1,18 @@
+
+@action testclass.init {
+    # create object
+    self = obj *testclass
+
+    # adding attribute
+    soostext = "lool"
+    attr self *soostext
+
+
+    return self
+}
+
+@action testclass.test {
+    self = arg[0]
+    f = getattr self *soostext
+    print f
+}

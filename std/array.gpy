@@ -1,0 +1,15 @@
+
+@action array {
+    py 2 {
+        stack["return"] = []
+    }
+    return_type "action"
+}
+
+@action append {
+    object = arg[0]
+    to_append = arg[1]
+    py 2 {
+        stack["object"].append(stack["to_append"])
+    }
+}

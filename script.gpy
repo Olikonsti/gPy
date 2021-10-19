@@ -1,0 +1,20 @@
+@import std/stdlib.gpy
+@import testclass.gpc
+
+@action main {
+    f = testclass.init
+    t = testclass.init
+
+    s = meeem
+    if s > 2 {
+        print "yee"
+    }
+}
+
+@action meeem {
+    return 3920
+}
+
+@action soos {
+    print "mm"
+}
