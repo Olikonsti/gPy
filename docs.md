@@ -1,5 +1,23 @@
 # gPy
 
+# example program
+```
+@import std/stdlib.gpy
+
+@action main {
+    value = test
+    print value
+}
+
+@action test {
+    var = 12 + 12
+    return var
+}
+
+### OUTPUT ###
+24.0
+```
+
 # Keywords
 
 ````
@@ -204,6 +222,7 @@ dog.gpc
 
 script.gpy
 ```
+@import std/stdlib.gpy
 @import examples/dog.gpc
 
 @action main {

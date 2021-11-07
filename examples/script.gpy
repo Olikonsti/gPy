@@ -5,10 +5,13 @@
 @action main {
     f = dog.init
     dog.print_info f
+    d = meeem
+    print d
 }
 
 @action meeem {
-    return 3920
+    var = 12 + 12
+    return var
 }
 
 @action soos {
