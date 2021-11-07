@@ -176,6 +176,42 @@ examples:
 waits for user to press enter before exiting
 </details>
 
+# using classtools
+
+
+dog.gpc
+```
+@action dog.init {
+
+    # create object
+    self = obj *dog
+    
+    
+    name = "knecht"
+    # adding attribute to object
+    attr self *name
+
+    name = "ne"
+
+    return self
+}
+
+@action dog.print_info {
+    @classaction
+    print name
+}
+```
+
+script.gpy
+```
+@import examples/dog.gpc
+
+@action main {
+    f = dog.init
+    dog.print_info f
+}
+```
+
 
 # Access gPy variables in 'py' block
 ````
