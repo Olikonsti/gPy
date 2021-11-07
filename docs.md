@@ -13,15 +13,33 @@ while <var1> != <var2> {
 }
 ````
 ````
-py <indentation> {
+py <indentation level> {
     # python code
 }
 ````
 
-# Build in functions
+<details>
+  <summary>variable declaration</summary>
+
+allowes to give a variable a value
+
+args:
+- variable/value/calculation
+
+return:
+- value declared by args
+
+examples:
+``var1 = 1``
+``var2 = 3 + var1``
+</details>
+
+# STD functions
 
 
-## print
+<details>
+  <summary>print</summary>
+
 prints text to the console
 
 args:
@@ -30,8 +48,12 @@ args:
 examples:
 ``print "test message"``
 ``print defined_var``
+</details>
 
-## input
+
+<details>
+  <summary>input</summary>
+
 asks the user for input by offering him a text
 
 args:
@@ -43,22 +65,26 @@ return:
 examples:
 ``out = input "> "``
 ``print defined_var``
+</details>
 
-## variable declaration
-allowes to give a valuable a value
+
+<details>
+  <summary>thread</summary>
+
+starts a new thread of a function specified by a function pointer
 
 args:
-- variable/value/calculation # variable to declare value to
-
-return:
-- value declared by args # string
+- function pointer
 
 examples:
-``var1 = 1``
-``var2 = 3 + var1``
+``thread *testaction``
+</details>
 
-## delay
-waits for the specified amount in seconds
+
+<details>
+  <summary>delay</summary>
+
+waits for the specified time in seconds
 
 args:
 - variable/value # float for delay in seconds
@@ -66,16 +92,90 @@ args:
 examples:
 ``delay 3.8``
 ``delay var2``
+</details>
 
-## windisplay
-displays a variable amount in a window (only works in exec_mode 0)
+
+<details>
+  <summary>get_type</summary>
+
+prints name and type of a variable pointer
 
 args:
-- pointer # variable to always display in a window
+- variable pointer
 
 examples:
-``windisplay *log``
-``windisplay *var2``
+``get_type *age``
+</details>
+
+
+<details>
+  <summary>stradd</summary>
+
+adds two strings
+
+args:
+- variable/value # string1
+- variable/value # string2
+
+return:
+- string
+
+examples:
+``stradd name1 name2``
+</details>
+
+
+<details>
+  <summary>value</summary>
+
+returns value of a variable pointer
+
+args:
+- variable pointer
+
+return:
+- value of variable
+
+examples:
+``value *name``
+</details>
+
+
+<details>
+  <summary>return</summary>
+
+sets return variable to first arg
+
+args:
+- variable/value
+
+return:
+- value
+
+examples:
+``return 321``
+</details>
+
+
+<details>
+  <summary>genuuid</summary>
+
+returns a uuid used for objects etc.
+
+return:
+- value # float
+
+examples:
+``genuuid``
+</details>
+
+
+<details>
+  <summary>user_confirm_exit</summary>
+
+waits for user to press enter before exiting
+</details>
+
 
 # Access gPy variables in 'py' block
 ````

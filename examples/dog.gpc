@@ -1,0 +1,19 @@
+
+
+@action dog.init {
+    self = obj *dog
+
+    name = "knecht"
+    attr self *name
+
+    name = "ne"
+
+    return self
+}
+
+@action dog.print_info {
+    @classaction
+
+
+    print name
+}

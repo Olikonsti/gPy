@@ -37,6 +37,7 @@
 }
 
 @action thread {
+"takes function pointer to start a new thread"
     py 2 {
         print(stack["arg[0]"][1:])
         threading.Thread(target=self.action, args=[stack["arg[0]"][1:], []]).start()

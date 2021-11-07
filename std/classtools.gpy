@@ -16,6 +16,17 @@
     return obj_address
 }
 
+@action @classaction {
+    "indicates that the next code should be able to use the class attributes"
+    self = arg[0]
+
+    py 2 {
+        obj_address = stack["self"]
+        for key, value in stack[obj_address].items():
+            stack[key] = value
+    }
+}
+
 @action setattr {
     "creates a class attribute in [obj_address] with name [variable_name] and the content [variable_content]"
 

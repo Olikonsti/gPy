@@ -1,0 +1,16 @@
+@import std/stdlib.gpy
+@import examples/testclass.gpc
+@import examples/dog.gpc
+
+@action main {
+    f = dog.init
+    dog.print_info f
+}
+
+@action meeem {
+    return 3920
+}
+
+@action soos {
+    print "mm"
+}
