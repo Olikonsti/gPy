@@ -1,0 +1,32 @@
+@import std/stdlib.gpy
+
+@action declare {
+    running = True
+}
+
+@action console {
+    declare
+    command_iteration
+}
+
+@action main {
+    command_iteration
+}
+
+@action command_iteration {
+    while running == True {
+        uip = input "gPy>"
+        py 3 {
+            line = self.pytools.get_variable("uip")
+            cmdlets = line.split(" ")
+            _cmdlets = []
+            for i in cmdlets:
+                try:
+                    f = float(i)
+                except:
+                    f = i
+                _cmdlets.append(f)
+            self.action(cmdlets[0], _cmdlets[1:])
+        }
+    }
+}

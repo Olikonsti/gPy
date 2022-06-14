@@ -1,0 +1,29 @@
+
+
+@action Window.init {
+    title = arg[0]
+    self = obj *Window.init
+    py 2 {
+        instance = Tk()
+        instance.title(self.pytools.get_variable("title"))
+        self.pytools.set_variable("instance", instance)
+    }
+    type = "WINDOW"
+    attr self *type
+    attr self *instance
+    return self
+}
+
+@action Window.test {
+    @classaction
+    print type
+}
+
+@action Window.run {
+    @classaction
+    py 2 {
+        instance = self.pytools.get_variable("instance")
+        instance.mainloop()
+    }
+	
+}

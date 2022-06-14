@@ -1,7 +1,14 @@
 from printutils import *
-
-from tkinter import *
-import tkinter.ttk as ttk
+from std.Python.pytools import *
+try:
+    from tkinter import *
+    import tkinter.ttk as ttk
+except:
+    print("""
+------------------------------------
+RUNTIME ERROR: Tkinter import failed! (GUI NOT WORKING)
+------------------------------------
+""")
 
 debug = False
 class Interpreter():
@@ -9,6 +16,9 @@ class Interpreter():
     def __init__(self, code, compile, load_mode, debug):
         self.code = code
         self.debug = debug
+
+        # python interpreter extensions
+        self.pytools = Pytools(self)
 
         self.actions = {}
         self.stack = {"log": ERRORS}
@@ -36,8 +46,8 @@ class Interpreter():
             print("inspecting imports")
         self.inspect_import(self.code)
         if self.debug:
-            print(f"{self.actions.keys() = }")
-            print(f"{self.stack = }")
+            print(f"{self.actions.keys()}")
+            print(f"{self.stack}")
 
         if self.compile:
             print("compiling...")
@@ -50,14 +60,15 @@ class Interpreter():
                 print(f"using stdlib version {self.stack['stdlib_version']}")
                 print("ENTERING RUNTIME\n")
             self.std_lines = 0
-            self.runaction("main")
+            self.action("main", [])
+            self.action("start", [])
             if self.debug:
                 print("----------EXIT---------")
-                print(f"{self.actions = }")
+                print(f"{self.actions}")
                 print("\n")
-                print(f"{self.stack = }")
+                print(f"{self.stack}")
                 print("\n")
-                print(f"{self.inspected_actions = }")
+                print(f"{self.inspected_actions}")
 
     def save(self, filename):
         save = {"version": self.version, "sp_code": self.split_code, "actions": self.actions, "stack": self.stack}
@@ -66,20 +77,41 @@ class Interpreter():
         f.close()
 
     def load(self, filename):
-        f = open(filename, "r")
-        d = f.read()
-        exec(f"global save_; save_ = {d}")
-        f.close()
-        if save_["version"] != self.version:
-            print("INTERPRETER ERROR: VERSION WRONG")
-            print(f"SCRIPT_VERSION: {save_['version']}")
-            print(f"INTERPRETER_VERSION: {self.version}\n")
-            input(">PRESS RETURN TO TRY EXECUTING THE CODE")
-        self.split_code = save_["sp_code"]
-        self.actions = save_["actions"]
-        self.stack = save_["stack"]
-        self.runaction("global")
-        self.runaction("main")
+        try:
+            f = open(filename, "r")
+            d = f.read()
+            exec(f"global save_; save_ = {d}")
+            f.close()
+            if save_["version"] != self.version:
+                print("INTERPRETER ERROR: VERSION WRONG")
+                print(f"SCRIPT_VERSION: {save_['version']}")
+                print(f"INTERPRETER_VERSION: {self.version}\n")
+                input(">PRESS RETURN TO TRY EXECUTING THE CODE")
+            self.split_code = save_["sp_code"]
+            self.actions = save_["actions"]
+            self.stack = save_["stack"]
+            self.runaction("global")
+            self.action("main", [])
+            self.action("start", [])
+        except Exception as e:
+            print(f"BYTECODE_NOT_LOADED EXIT 1 EXCEPTION: {e}")
+
+    def import_file(self, file):
+        if file not in self.imported:
+
+            if self.debug:
+                print(f"importing '{file}'")
+            try:
+                f = open(file, "r")
+                c = f.read()
+                f.close()
+                if self.debug:
+                    print(f"inspecting actions from {file}")
+                self.inspect_actions(c)
+                self.inspect_import(c)
+                self.imported.append(file)
+            except:
+                error(f"Could not import '{file}'", 0, 0)
 
     def inspect_import(self, code):
         self.split_code_ = code.splitlines()
@@ -90,22 +122,9 @@ class Interpreter():
 
         for index, line in enumerate(self.split_code__):
             for index2, word in enumerate(line):
-                if word == "@import":
+                if word == "@import" or word == "@importieren":
                     file = line[index2 + 1]
-                    if file not in self.imported:
-                        self.imported.append(file)
-                        if self.debug:
-                            print(f"importing '{file}'")
-                        try:
-                            f = open(file, "r")
-                            c = f.read()
-                            f.close()
-                            if self.debug:
-                                print(f"inspecting actions from {file}")
-                            self.inspect_actions(c)
-                            self.inspect_import(c)
-                        except:
-                            error(f"Could not import '{file}'", index, index2)
+                    self.import_file(file)
 
 
     def inspect_actions(self, code):
@@ -152,7 +171,7 @@ class Interpreter():
 
         for index, line in enumerate(self.split_code):
             for index2, word in enumerate(line):
-                if word == "@action":
+                if word == "@action" or word == "@aktion":
                     try:
                         action_name = line[index2+1]
                         self.actions[action_name] = [index, None, None]
@@ -169,13 +188,14 @@ class Interpreter():
         self.runcode(self.actions[action][2], self.actions[action][0], action)
 
     def action(self, action, args):
-        # attribute getter
-        for enum, w in enumerate(args):
-            try:
-                self.stack[f"arg[{enum}]"] = self.stack[w]
-            except:
-                self.stack[f"arg[{enum}]"] = w
-        self.runaction(action)
+        if action in self.actions:
+            # attribute getter
+            for enum, w in enumerate(args):
+                try:
+                    self.stack[f"arg[{enum}]"] = self.stack[w]
+                except:
+                    self.stack[f"arg[{enum}]"] = w
+            self.runaction(action)
 
     def runcode(self, code, line_index, action=None):
 
@@ -188,9 +208,6 @@ class Interpreter():
 
         for index, line in enumerate(code):
             self.cursor_line = index + line_index + 1
-            if action != "every_action":
-                pass
-                #self.runaction("every_action")
             for index2, word in enumerate(line):
                 self.cursor_word = index2
 
@@ -274,7 +291,7 @@ class Interpreter():
                         except Exception as e:
                             error(f"python error: {e}", self.cursor_line, self.cursor_word)
 
-                    elif word == "if":
+                    elif word == "if" or word == "wenn":
                         in_if_clause = True
 
                         var1 = self.check_attribute(line[index2 + 1])
@@ -296,7 +313,7 @@ class Interpreter():
                         #print("if",if_code)
                         index_end_if_clause = amount + index + 1
 
-                        if "else" in code[index_end_if_clause]:  # else keyword line
+                        if "else" in code[index_end_if_clause] or "sonst" in code[index_end_if_clause]:  # else keyword line
                             else_code = []
                             indent = 1
                             for amount, line_ in enumerate(code[index_end_if_clause + 1:]):
@@ -324,7 +341,7 @@ class Interpreter():
                                 #print(else_code)
                             self.runcode(else_code, index_end_if_clause + line_index + 1)
 
-                    elif word == "while":
+                    elif word == "while" or word == "während":
                         in_while = True
 
                         var1 = self.check_attribute(line[index2 + 1])
@@ -344,27 +361,9 @@ class Interpreter():
                         index_end_while_clause = amount + index + 1
 
                         while check_operator(line[index2 + 2], var1, var2):
+                            self.runcode(while_code, index)
                             var1 = self.check_attribute(line[index2 + 1])
                             var2 = self.check_attribute(line[index2 + 3])
-                            self.runcode(while_code, index)
-
-
-                    elif word == "windisplay":
-                        import tkinter as tk
-                        self.var = line[index2 + 2][1:]
-                        def upd_label():
-                            self.label.config(text=self.stack[self.var])
-                            self.win.after(1, upd_label)
-                        self.win = tk.Tk()
-                        self.win.title(line[index2 + 1])
-                        try:
-                            self.label = tk.Label(self.win, text=self.stack[self.var], justify=tk.LEFT)
-                            self.label.pack()
-                            upd_label()
-                        except:
-                            error(f"variable '{self.var}' not defined", self.cursor_line, self.cursor_word)
-
-
 
                     # function run
                     elif word in self.actions and line[index2 - 1] != "=":
@@ -404,7 +403,7 @@ class Interpreter():
                 action_end_index = action_start_index + amount
                 break
         action_code = self.split_code[action_start_index + 1:action_end_index]
-        if debug:
+        if self.debug:
             print(f"\naction '{action}' inspection:")
             print(f"start: {action_start_index}")
             print(f"end: {action_end_index}")

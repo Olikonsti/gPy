@@ -1,0 +1,15 @@
+@import std/stdlib.gpy
+@import std/gui.gpy
+
+@action declare {
+    install_location = ""
+    version = 1.0
+}
+
+@action main {
+    installer_window = Window.init "test"
+    print "eee"
+    f = Window.test installer_window
+    Window.run f
+    print "test"
+}

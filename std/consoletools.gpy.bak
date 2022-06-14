@@ -1,0 +1,57 @@
+
+@action help {
+    print "Console specific actions:"
+    print "print test!!!"
+    print "copies to new name"
+    print "#alloc_val <newvariable:string>"
+    print "#alloc_ret <functioncall:function>"
+    print "#ex_value <variable:string>"
+    print "#list_imports"
+    print "#exit"
+    print ""
+}
+
+@action test {
+    print "works"
+    return "yeet"
+}
+
+@action stack {
+
+}
+
+
+
+@action ex_value {
+    py 2 {
+        print(self.pytools.get_variable("arg[0]"))
+    }
+}
+
+"allocates variable value to another variable name"
+@action alloc {
+    arg1 = arg[0]
+    arg2 = arg[1]
+    py 2 {
+        self.pytools.set_variable(self.pytools.get_variable("arg1"), self.pytools.get_variable(self.pytools.get_variable("arg2")))
+    }
+}
+
+"import gpy or gpc file"
+@action import {
+    py 2 {
+        self.import_file(self.pytools.get_variable("arg[0]"))
+    }
+}
+
+@action list_imports {
+    py 2 {
+        print(self.imported)
+    }
+}
+
+@action exit {
+    py 2 {
+        raise SystemExit
+    }
+}

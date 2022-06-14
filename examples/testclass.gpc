@@ -12,6 +12,7 @@
 
 @action testclass.test {
     self = arg[0]
-    f = getattr self *soostext
+    @classaction
+    f = soostext
     print f
 }

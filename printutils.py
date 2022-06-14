@@ -39,6 +39,16 @@ def check_operator(operator, var1, var2):
             return True
         else:
             return False
+    elif operator == ">=":
+        if var1 >= var2:
+            return True
+        else:
+            return False
+    elif operator == "<=":
+        if var1 <= var2:
+            return True
+        else:
+            return False
     elif operator == "<":
         if var1 < var2:
             return True

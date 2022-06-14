@@ -1,12 +1,18 @@
 @import std/stdlib.gpy
-@import examples/testclass.gpc
-@import examples/dog.gpc
+
+@action declare {
+
+}
 
 @action main {
-    f = dog.init
-    dog.print_info f
-    d = meeem
-    print d
+    print "working!!! test2"
+    test2 1 "see s" "soos"
+}
+
+@action test2 {
+    print arg[0]
+    print arg[1]
+    print arg[2]
 }
 
 @action meeem {

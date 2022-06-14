@@ -1,12 +1,10 @@
 
 
 @action dog.init {
-    self = obj *dog
+    name = arg[0]
+    self = obj *dog.init
 
-    name = "knecht"
     attr self *name
-
-    name = "ne"
 
     return self
 }
@@ -14,4 +12,10 @@
 @action dog.print_info {
     @classaction
     print name
+}
+
+@action dog.change_name {
+    @classaction
+    name = arg[1]
+    attr self *name
 }

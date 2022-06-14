@@ -1,39 +1,30 @@
 @import std/stdlib.gpy
-@import testlib
+@import examples/dog.gpc
+
+@action declare {
+    var2 = 0
+    my_dog = dog.init "hund1"
+    my_dog2 = dog.init "hund2"
+}
 
 @action main {
-    var2 = 6
-    test var2
-    soos
+    test
+    #user_test
+    dog.print_info my_dog2
+    dog.change_name my_dog "hund3"
+    dog.print_info my_dog
 }
 
 @action test {
     count = 0
-    count = count + 1
-    print count
     f = input ">"
-    get_type *f
-    get_type *count
-    print f
-    d = window
-    loop d
-    #soos
 }
 
-@action soos {
-    print "before_if"s
-    if var2 == 12 {
-        print "ye"
-        print var2
-    }
-    print logs
-    ses
-}
-
-@action ses {
+@action user_test {
+    f = convert.float f
     while 1 == 1 {
         var2 = var2 + 10
         print var2
-        #delay 0.1
+        delay f
     }
 }

@@ -1,13 +1,16 @@
-@import std/consoletools.gpy
 @import std/classtools.gpy
 
-
 @action global {
-    stdlib_version = 1.0
+    stdlib_version = 0.5
     height_uuid = 0
+    pytools_module = load_python "std/Python/pytools.py"
     py 2 {
+        self.pytools = stack["pytools_module"](self)
+
         self.pytools.declare_variable("True", True)
         self.pytools.declare_variable("False", False)
+
+
     }
     declare
 }
@@ -23,6 +26,13 @@
     }
 }
 
+"deletes a variable from stack or a action from the actions list"
+@action del {
+    py 2 {
+
+    }
+}
+
 @action cmd {
     py 2 {
         import os
@@ -30,14 +40,14 @@
     }
 }
 
-@action delay {
+@action warte {
     py 2 {
         import time
         time.sleep(self.pytools.get_variable("arg[0]"))
     }
 }
 
-@action print {
+@action schreibe {
     py 2 {
         print(self.pytools.get_variable("arg[0]"))
     }
@@ -51,7 +61,7 @@
     }
 }
 
-@action input {
+@action eingabe {
     py 2 {
         try:
             var = input(stack["arg[0]"] + " ")
@@ -90,7 +100,7 @@
     }
 }
 
-@action return {
+@action zurück {
     py 2 {
         stack["return"] = stack["arg[0]"]
     }
